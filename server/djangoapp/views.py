@@ -98,9 +98,14 @@ def get_dealer_reviews(request, dealer_id):
         for review_detail in reviews:
             response = analyze_review_sentiments(review_detail['review'])
             print(response)
-            review_detail['sentiment'] = response['sentiment']
+            #review_detail['sentiment'] = response['sentiment']
+            if isinstance(response, dict) and 'sentiment' in response:
+                review_detail['sentiment'] = response['sentiment']
+            else:
+                review_detail['sentiment'] = "neutral"  # Valor por defecto si IBM devuelve "Not Found"
         return JsonResponse({"status":200,"reviews":reviews})
     else:
+        review_detail['sentiment'] = "neutral"  # Fallback seguro si falla el servicio externo
         return JsonResponse({"status":400,"message":"Bad Request"})
 
 # Create a `get_dealer_details` view to render the dealer details
@@ -114,12 +119,18 @@ def get_dealer_details(request, dealer_id):
 
 # Create a `add_review` view to submit a review
 def add_review(request):
+    print("--> ¡Petición de POST Review recibida en Django!")
     if(request.user.is_anonymous == False):
+        print("--> [ALERTA] El usuario NO está autenticado. Bloqueando envío.")
         data = json.loads(request.body)
         try:
+            print("--> Datos recibidos del frontend:", data)
+
             response = post_review(data)
+            print("--> Respuesta del microservicio Node:", response)
             return JsonResponse({"status":200})
         except:
+            print(f"--> Error al procesar la review: {e}")
             return JsonResponse({"status":401,"message":"Error in posting review"})
     else:
         return JsonResponse({"status":403,"message":"Unauthorized"})
