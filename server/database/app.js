@@ -12,7 +12,7 @@ const reviews_data = JSON.parse(fs.readFileSync("reviews.json", 'utf8'));
 const dealerships_data = JSON.parse(fs.readFileSync("dealerships.json", 'utf8'));
 
 //mongoose.connect("mongodb://mongo_db:27017/",{'dbName':'dealershipsDB'});
-mongoose.connect("mongodb://mongo_db:27017/dealershipsDB");
+mongoose.connect("mongodb://localhost:27017/dealershipsDB");
 
 mongoose.connection.on('connected', () => {
     console.log('¡Mongoose se ha conectado a MongoDB con éxito!');
