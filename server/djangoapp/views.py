@@ -1,8 +1,8 @@
 # Uncomment the required imports before adding the code
 
-from django.shortcuts import render
+#from django.shortcuts import render
 from django.contrib.auth.models import User
-from django.contrib.auth import logout as auth_logout
+#from django.contrib.auth import logout as auth_logout
 from django.contrib.auth import login, authenticate
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
